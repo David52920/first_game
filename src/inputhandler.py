@@ -1,13 +1,12 @@
 import pygame
 
 class InputHandler:
-    def __init__(self, game, pygame):
+    def __init__(self, game):
         self.game = game
-        self.pygame = pygame
 
     def handleKeyPress(self):
-        keys = self.pygame.key.get_pressed()
-        if keys[self.pygame.K_LCTRL] and keys[self.pygame.K_q]:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LCTRL] and keys[pygame.K_q]:
             self.game.running = False
 
     def handleMouseDown(self):

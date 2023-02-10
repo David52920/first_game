@@ -6,13 +6,13 @@ from src.loader import loader
 
 class Game:
     def __init__(self):
-        self.pygame = pygame
-        self.pygame.display.set_caption("First Game")
-        self.pygame.init()
+        pygame.display.set_caption("First Game")
+        pygame.init()
         self.screen = pygame.display.set_mode([800, 800])
         self.inputhandler = None
         self.running = True
         self.currentscene = None
+        self.background = loader.loadImage(".\\res\\game_background.jpg") 
         self.scenes = [LoginScene(self)]
         self.changeScene(self.scenes[0])
         self.gameObjects = []
@@ -21,29 +21,29 @@ class Game:
     def initGameLoop(self):
         while self.running:
             if self.inputhandler == None:
-                self.inputhandler = InputHandler(self, self.pygame)
-            for event in self.pygame.event.get():
-               if event.type == self.pygame.QUIT:
-                   self.pygame.quit()
+                self.inputhandler = InputHandler(self)
+            event_list = pygame.event.get()
+            for event in event_list:
+               if event.type == pygame.QUIT:
+                   pygame.quit()
                    sys.exit()
-               elif event.type == self.pygame.KEYDOWN:
+               elif event.type == pygame.KEYDOWN:
                     self.inputhandler.handleKeyPress()
-               elif event.type == self.pygame.MOUSEBUTTONDOWN:
-                    self.inputhandler.handleMouseDown()
+               elif event.type == pygame.MOUSEBUTTONDOWN:
+                   self.inputhandler.handleMouseDown()
 
             self.screen.fill((0,0,0))
 
-            background = loader.loadImage(".\\res\\game_background.jpg")
-            self.screen.blit(background, background.get_rect(center = self.screen.get_rect().center))
+            self.screen.blit(self.background, self.background.get_rect(center = self.screen.get_rect().center))
 
-            self.updateScene()
+            self.updateScene(event_list)
             self.renderScene()
 
-            self.pygame.display.update()
-        self.pygame.quit()
+            pygame.display.update()
+        pygame.quit()
 
-    def updateScene(self):
-        self.currentscene.update()
+    def updateScene(self, events):
+        self.currentscene.update(events)
 
     def renderScene(self):
         self.currentscene.render()
