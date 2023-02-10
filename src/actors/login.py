@@ -1,13 +1,12 @@
 from actors.scene import Scene
 from actors.lobby import LobbyScene
 from pygame_widgets.button import Button
-import pygame_widgets
+import pygame_widgets, pygame
 
 class LoginScene(Scene):
     def __init__(self, game):
         super().__init__()
         self.game = game
-        self.pygame = game.pygame
         self.screen = game.screen
         self.initScene()
         self.hideActors()
@@ -21,11 +20,8 @@ class LoginScene(Scene):
         self.button.pressedColour=(235, 182, 54)
         self.addActor(self.button)
 
-    def update(self):
-        events = self.pygame.event.get()
-        for actor in self.actors:
-            if self.isWidget(actor):
-                pygame_widgets.update(events)
+    def update(self, events = None):
+        pygame_widgets.update(events)
 
     def render(self):
         for actor in self.actors:

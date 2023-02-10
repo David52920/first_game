@@ -1,13 +1,12 @@
 from mimetypes import init
 from actors.scene import Scene
 from pygame_widgets.button import Button
-import pygame_widgets
+import pygame_widgets, pygame
 
 class LobbyScene(Scene):
     def __init__(self, game):
         super().__init__()
         self.game = game
-        self.pygame = game.pygame
         self.screen = game.screen
         self.initScene()
         self.hideActors()
@@ -21,13 +20,10 @@ class LobbyScene(Scene):
         button.pressedColour=(235, 182, 54)
         self.addActor(button) 
 
-    def update(self):
-        events = self.pygame.event.get()
-        for actor in self.actors:
-            if self.isWidget(actor):
-                pygame_widgets.update(events)
+    def update(self, events = None):
+        pygame_widgets.update(events)
 
     def render(self):
         board = self.loader.loadImage(".\\res\\bejeweled\\background.png")
         self.screen.blit(board, board.get_rect(center = self.screen.get_rect().center))
-        self.pygame.display.flip()
+        pygame.display.flip()
