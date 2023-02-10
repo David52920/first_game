@@ -2,7 +2,7 @@ import pygame, sys
 from inputhandler import InputHandler
 
 from actors.login import LoginScene
-from src.loader import Loader
+from src.loader import loader
 
 class Game:
     def __init__(self):
@@ -33,7 +33,7 @@ class Game:
 
             self.screen.fill((0,0,0))
 
-            background = Loader(pygame).loadImage(".\\res\\game_background.jpg")
+            background = loader.loadImage(".\\res\\game_background.jpg")
             self.screen.blit(background, background.get_rect(center = self.screen.get_rect().center))
 
             self.updateScene()
