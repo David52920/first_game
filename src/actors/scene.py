@@ -1,11 +1,11 @@
 import abc
 import pygame
-from src.loader import Loader
+from src.loader import loader
 
 class Scene:
     def __init__(self):
         self.actors = []
-        self.loader = Loader(pygame)     
+        self.loader = loader     
         self.background = None
 
     @abc.abstractclassmethod
