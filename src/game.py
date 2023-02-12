@@ -8,11 +8,17 @@ class Game:
     def __init__(self):
         pygame.display.set_caption("First Game")
         pygame.init()
+        self.height = 800
+        self.width = 800
         self.screen = pygame.display.set_mode([800, 800])
         self.inputhandler = None
         self.running = True
         self.currentscene = None
-        self.background = loader.loadImage(".\\res\\game_background.jpg") 
+        self.initialMx = 0
+        self.initialMy = 0
+        self.dragging = False
+        self.difference = (0, 0)
+        self.background = loader.loadImage("res/game_background.jpg")
         self.scenes = [LoginScene(self)]
         self.changeScene(self.scenes[0])
         self.gameObjects = []
@@ -22,6 +28,7 @@ class Game:
         while self.running:
             if self.inputhandler == None:
                 self.inputhandler = InputHandler(self)
+            mx, my = pygame.mouse.get_pos()
             event_list = pygame.event.get()
             for event in event_list:
                if event.type == pygame.QUIT:
@@ -29,8 +36,17 @@ class Game:
                    sys.exit()
                elif event.type == pygame.KEYDOWN:
                     self.inputhandler.handleKeyPress()
+               elif event.type == pygame.MOUSEBUTTONUP:
+                   self.dragging = False
+                   self.difference = (0, 0)
                elif event.type == pygame.MOUSEBUTTONDOWN:
-                   self.inputhandler.handleMouseDown()
+                   if self.initialMx != mx or self.initialMy != my and not self.dragging:
+                        self.dragging = True
+                        self.initialMx = mx
+                        self.initialMy = my
+               elif event.type == pygame.MOUSEMOTION:
+                   if self.dragging:
+                       self.difference = (-(mx - self.initialMx) / 100, -(my - self.initialMy) / 100)
 
             self.screen.fill((0,0,0))
 

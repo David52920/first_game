@@ -3,6 +3,8 @@ import pygame
 class InputHandler:
     def __init__(self, game):
         self.game = game
+        self.mx = 0
+        self.my = 0
 
     def handleKeyPress(self):
         keys = pygame.key.get_pressed()
@@ -12,3 +14,6 @@ class InputHandler:
     def handleMouseDown(self):
         mouse = pygame.mouse.get_pos()
         print(mouse)
+
+    def handleDrag(self):
+        pass

@@ -2,7 +2,7 @@ import abc
 import pygame
 from src.loader import loader
 
-class Scene:
+class Scene(abc.ABC):
     def __init__(self):
         self.actors = []
         self.loader = loader     
@@ -18,10 +18,6 @@ class Scene:
 
     @abc.abstractclassmethod
     def addActor(self, actor):
-       pass
-
-    @abc.abstractclassmethod
-    def dispose(self):
        pass
 
     def isWidget(self, widget):

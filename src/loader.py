@@ -7,7 +7,8 @@ class Loader:
         pass
 
     def loadImage(self, location):
-       return pygame.image.load(os.path.join(location)).convert()
+        dirname = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+        return pygame.image.load(os.path.join(dirname, location)).convert_alpha()
 
     def loadSprite(self):
         pass
