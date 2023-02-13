@@ -18,20 +18,26 @@ class LobbyScene(Scene):
         self.screen = game.screen
         self.initScene()
         self.hideActors()
-        self.mapWidth = 32
-        self.mapHeight = 24
+        self.mapWidth = 80
+        self.mapHeight = 80
         self.map = [[0] * self.mapHeight for _ in range(self.mapWidth)]
         self.fillMap()
-        self.cameraX = 0
-        self.cameraY = 0
+        self.xBoundsPos = 5000
+        self.xBoundsNeg = 5000
+        self.yBoundsPos = 5000
+        self.yBoundsNeg = 100
+        self.mapXOffset = 250
+        self.cameraXOffset = 0
+        self.cameraYOffset = 0
         self.dragging = False
         self.difference = (0, 0)
         self.selectedTile = (0, 0)
         self.font = pygame.font.SysFont('Comic Sans MS', 7)
+        self.lastpos = (-10000, -10000)
 
     def refresh(self):
-        self.cameraX = 0
-        self.cameraY = 0
+        self.cameraXOffset = 0
+        self.cameraYOffset = 0
         self.dragging = False
         self.difference = (0, 0)
         self.selectedTile = (0, 0)
@@ -47,23 +53,24 @@ class LobbyScene(Scene):
 
     def update(self):
         if self.dragging:
-            if (self.cameraX >= -500 and self.cameraX <= 500) and (self.cameraY >= -500 and self.cameraY <= 500):
-                self.cameraX -= self.difference[0]
-                self.cameraY -= self.difference[1]
-            elif (self.cameraX > 500 or self.cameraX < -500):
-                self.cameraX = -math.floor(abs(self.cameraX) / 100.00) * 100 if self.cameraX < 0 else math.floor(self.cameraX / 100.00) * 100
-            elif (self.cameraY > 500 or self.cameraY < -500):
-                self.cameraY = -math.floor(abs(self.cameraY) / 100.00) * 100 if self.cameraY < 0 else math.floor(self.cameraY / 100.00) * 100
+            if self.lastpos == pygame.mouse.get_pos(): # stop dragging when user doesnt move the mouse but is still holding the mouse button
+                self.dragging = False
+            if (self.cameraXOffset >= -self.xBoundsNeg and self.cameraXOffset <= self.xBoundsPos) and (self.cameraYOffset >= -self.yBoundsNeg and self.cameraYOffset <= self.yBoundsPos):
+                self.cameraXOffset -= self.difference[0]
+                self.cameraYOffset -= self.difference[1]
+            elif (self.cameraXOffset > self.xBoundsPos or self.cameraXOffset < -self.xBoundsNeg):
+                self.cameraXOffset = -math.floor(abs(self.cameraXOffset) / 100.00) * 100 if self.cameraXOffset < 0 else math.floor(self.cameraXOffset / 100.00) * 100
+            elif (self.cameraYOffset > self.yBoundsPos or self.cameraYOffset < -self.yBoundsNeg):
+                self.cameraYOffset = -math.floor(abs(self.cameraYOffset) / 100.00) * 100 if self.cameraYOffset < 0 else math.floor(self.cameraYOffset / 100.00) * 100
 
     def render(self, events=None):
+        self.screen.fill((7, 126, 217))
         for tileX in range(len(self.map)):
             for tileY in range(len(self.map[tileX])):
                 tile = self.map[tileX][tileY].type
-                worldX = ((tileX - tileY) * self.TILE_WIDTH_HALF) - self.cameraX
-                worldY = ((tileX + tileY) * self.TILE_HEIGHT_HALF) - self.cameraY
-                self.screen.blit(tile, (250 + worldX, worldY))
-                text_surface = self.font.render("(" + str(worldX) +", " + str(worldY) + ")", False,  (0, 0, 0))
-                self.screen.blit(text_surface, (265 + worldX, 5 + worldY))
+                worldX = (((tileX - tileY) * self.TILE_WIDTH_HALF) - self.cameraXOffset) + self.mapXOffset
+                worldY = ((tileX + tileY) * self.TILE_HEIGHT_HALF) - self.cameraYOffset
+                self.screen.blit(tile, (worldX, worldY))
 
         pygame_widgets.update(events)
 
@@ -79,9 +86,11 @@ class LobbyScene(Scene):
                 self.map[i][j] = tile
    
     def getTile(self, screenX, screenY):
-        xTile = math.floor(( self.TILE_WIDTH_HALF * ((- self.TILE_HEIGHT_HALF + (screenY +  self.TILE_HEIGHT_HALF)) /  self.TILE_HEIGHT_HALF) + (screenX +  self.TILE_WIDTH_HALF)) /  self.TILE_WIDTH_HALF / 2)
-        yTile = math.ceil((((- self.TILE_HEIGHT_HALF * ( self.TILE_WIDTH_HALF + (screenX + self.TILE_WIDTH)) / self.TILE_WIDTH_HALF) + (screenY + self.TILE_HEIGHT)) /  self.TILE_HEIGHT_HALF) / 2);
-        return (xTile, yTile)
+        screenX += (self.cameraXOffset - self.mapXOffset)
+        screenY += self.cameraYOffset
+        tileX = math.floor((((self.TILE_WIDTH_HALF * (-self.TILE_HEIGHT_HALF + (screenY +  self.TILE_HEIGHT_HALF)) /  self.TILE_HEIGHT_HALF) + (screenX +  self.TILE_WIDTH_HALF)) /  self.TILE_WIDTH_HALF) / 2) - 1
+        tileY = math.ceil((((-self.TILE_HEIGHT_HALF * ( self.TILE_WIDTH_HALF + (screenX + self.TILE_WIDTH)) / self.TILE_WIDTH_HALF) + (screenY + self.TILE_HEIGHT)) /  self.TILE_HEIGHT_HALF) / 2) 
+        return (tileX, tileY)
 
     def handleMouseButtonUp(self, mouseEvent):
         self.dragging = False
@@ -89,7 +98,7 @@ class LobbyScene(Scene):
     def handleMouseButtonDown(self, mouseEvent):
         if mouseEvent.get_pressed()[0]:
             mx, my = mouseEvent.get_pos()
-            tile = self.getTile(mx - 250, my)
+            tile = self.getTile(mx, my)
             print(tile)
 
     def handleMouseMotion(self, mouseEvent):
@@ -97,6 +106,7 @@ class LobbyScene(Scene):
         if mouseEvent.get_pressed()[0]:
             self.dragging = True
             self.difference = ((mx) / 2, (my) / 2)
+            self.lastpos = mouseEvent.get_pos()
 
     def handleKeyDown(self, keys):
         pass

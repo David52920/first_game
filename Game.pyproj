@@ -26,6 +26,10 @@
     <Compile Include="src\actors\scene.py" />
     <Compile Include="src\actors\__init__.py" />
     <Compile Include="src\game.py" />
+    <Compile Include="src\objects\entities\enemy.py" />
+    <Compile Include="src\objects\entities\entity.py" />
+    <Compile Include="src\objects\entities\player.py" />
+    <Compile Include="src\objects\entities\__init__.py" />
     <Compile Include="src\util\assetmanager.py" />
     <Compile Include="src\util\loader.py" />
     <Compile Include="src\main.py" />
@@ -44,6 +48,7 @@
     <Folder Include="src\" />
     <Folder Include="src\actors\" />
     <Folder Include="src\objects\" />
+    <Folder Include="src\objects\entities\" />
     <Folder Include="src\objects\__pycache__\" />
     <Folder Include="src\puzzles\" />
     <Folder Include="src\util\" />
