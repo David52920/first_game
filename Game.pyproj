@@ -26,18 +26,25 @@
     <Compile Include="src\actors\scene.py" />
     <Compile Include="src\actors\__init__.py" />
     <Compile Include="src\game.py" />
-    <Compile Include="src\inputhandler.py" />
-    <Compile Include="src\loader.py" />
+    <Compile Include="src\util\assetmanager.py" />
+    <Compile Include="src\util\loader.py" />
     <Compile Include="src\main.py" />
+    <Compile Include="src\objects\tile.py" />
+    <Compile Include="src\objects\tilesets.py" />
+    <Compile Include="src\objects\__init__.py" />
     <Compile Include="src\puzzles\bejeweled.py" />
-    <Compile Include="src\util\util.py" />
+    <Compile Include="src\util\enums.py" />
+    <Compile Include="src\util\__init__.py" />
     <Compile Include="src\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="res\" />
     <Folder Include="res\bejeweled\" />
+    <Folder Include="res\tiles\" />
     <Folder Include="src\" />
     <Folder Include="src\actors\" />
+    <Folder Include="src\objects\" />
+    <Folder Include="src\objects\__pycache__\" />
     <Folder Include="src\puzzles\" />
     <Folder Include="src\util\" />
   </ItemGroup>
@@ -45,6 +52,20 @@
     <Content Include="res\bejeweled\background.png" />
     <Content Include="res\bejeweled\cursor.png" />
     <Content Include="res\bejeweled\gems.png" />
+    <Content Include="res\game_background.jpg" />
+    <Content Include="res\tiles\brick.png" />
+    <Content Include="res\tiles\concrete1.png" />
+    <Content Include="res\tiles\concrete2.png" />
+    <Content Include="res\tiles\dirt.png" />
+    <Content Include="res\tiles\dirtsand.png" />
+    <Content Include="res\tiles\grass1.png" />
+    <Content Include="res\tiles\grass2.png" />
+    <Content Include="res\tiles\rock.png" />
+    <Content Include="res\tiles\snow.png" />
+    <Content Include="res\tiles\stone.png" />
+    <Content Include="src\objects\__pycache__\tile.cpython-38.pyc" />
+    <Content Include="src\objects\__pycache__\tilesets.cpython-38.pyc" />
+    <Content Include="src\objects\__pycache__\__init__.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

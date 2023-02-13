@@ -1,11 +1,9 @@
 import abc
 import pygame
-from src.loader import loader
 
 class Scene(abc.ABC):
     def __init__(self):
-        self.actors = []
-        self.loader = loader     
+        self.actors = []  
         self.background = None
 
     @abc.abstractclassmethod
@@ -40,3 +38,19 @@ class Scene(abc.ABC):
         for actor in self.actors:
             if self.isWidget(actor):
                 actor.show()
+
+    @abc.abstractclassmethod
+    def handleMouseButtonUp(self, mx, my):
+        pass
+
+    @abc.abstractclassmethod
+    def handleMouseButtonDown(self, mx, my):
+        pass
+
+    @abc.abstractclassmethod
+    def handleMouseMotion(self, mx, my):
+        pass
+
+    @abc.abstractclassmethod
+    def handleKeyDown(self, key):
+        pass
