@@ -1,5 +1,5 @@
-from src.objects.entities.entity
+from src.objects.gameobject import GameObject
 
-class Enemy(Entity):
+class Enemy(GameObject):
     pass
 
