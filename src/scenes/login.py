@@ -3,7 +3,7 @@ from scenes.lobby import LobbyScene
 from pygame_widgets.button import Button
 import pygame_widgets, pygame
 
-from src.util.assetmanager import assetManager
+from src.objects.entities.player import Player
 
 class LoginScene(Scene):
     def __init__(self, game):
@@ -31,6 +31,7 @@ class LoginScene(Scene):
         pygame_widgets.update(events)
 
     def login(self):
+        self.game.addPlayer(Player(0,0))
         lobby = LobbyScene(self.game)
         self.game.addScene(lobby)
         self.game.changeScene(lobby)

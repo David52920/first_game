@@ -1,8 +1,7 @@
 from scenes.scene import Scene
 from objects.camera import Camera
 from pygame_widgets.button import Button
-from src.util.util import Position
-
+from src.util.position import Position
 import pygame_widgets
 
 
@@ -14,11 +13,13 @@ class LobbyScene(Scene):
         super().__init__()
         self.game = game
         self.screen = game.screen
+        self.players = game.players
         self.initScene()
         self.hideActors()
-        self.camera = Camera(Position(0,0))
-        self.gameMap = GameMap(game.gameWidth, game.gameHeight, self.camera)
-        self.gameMap.fillMap()
+        self.camera = Camera(0, 0, game.gameWidth - 200, game.gameHeight - 200)
+        self.camera.offset.x = 100
+        self.camera.offset.y = 100
+        self.gameMap = GameMap(game, self.camera).fillMap()
         self.dragging = False
         self.difference = (0, 0)
         self.lastpos = (-10000, -10000)
@@ -33,12 +34,19 @@ class LobbyScene(Scene):
         self.addActor(button)
 
     def update(self):
-        pass
+        for player in self.players:
+            player.update()
 
     def render(self, events=None):
         self.screen.fill((7, 126, 217))
         self.gameMap.render()
+        self.renderPlayers()
+        self.camera.render()
         pygame_widgets.update(events)
+
+    def renderPlayers(self):
+        for player in self.players:
+            player.render()
 
     def handleMouseButtonUp(self, mouseEvent):
         self.dragging = False
@@ -47,6 +55,11 @@ class LobbyScene(Scene):
         if mouseEvent.get_pressed()[0]:
             mx, my = mouseEvent.get_pos()
             self.gameMap.selectedTile = self.gameMap.getTile(mx, my)
+            #if self.gameMap.selectedTile:
+                #self.players[0].offset = Position(mx - self.gameMap.selectedTile.xOffset , my - self.gameMap.selectedTile.yOffset)
+                #self.camera.offset.x = mx * 0.5
+                #self.camera.offset.y = my * 0.5
+                #print(self.camera.position, self.players[0].position)
 
     def handleMouseMotion(self, mouseEvent):
         mx, my = mouseEvent.get_rel()

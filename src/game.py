@@ -3,6 +3,7 @@ import pygame, sys
 from src.util.assetmanager import assetManager
 from scenes.login import LoginScene
 
+
 class Game:
     FRAME_RATE = 1000/30
     MAX_UPDATES_PER_DRAW = 5
@@ -15,6 +16,7 @@ class Game:
         self.running = True
         self.currentscene = None
         self.scenes = [LoginScene(self)]
+        self.players = []
         self.changeScene(self.scenes[0])
         self.initGameLoop()
 
@@ -69,6 +71,12 @@ class Game:
 
     def addScene(self, scene):
         self.scenes.append(scene)
+
+    def addPlayer(self, plyr):
+        if len(self.players) > 0:
+            for player in self.players:
+                if plyr == player: return
+        self.players.append(plyr)
 
     def returnToLogin(self):
         self.currentscene.hideActors()

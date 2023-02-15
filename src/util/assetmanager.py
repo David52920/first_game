@@ -13,7 +13,8 @@ class AssetManager:
             "brick": loader.loadImage("res/tiles/brick.png"),
             "rock": loader.loadImage("res/tiles/rock.png"),
             "snow": loader.loadImage("res/tiles/snow.png"),
-            "stone": loader.loadImage("res/tiles/stone.png")
+            "stone": loader.loadImage("res/tiles/stone.png"),
+            "player": loader.loadImage("res/tiles/snow.png")
         }
 
     def getAsset(self, assetName):
