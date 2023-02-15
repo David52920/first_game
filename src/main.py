@@ -1,4 +1,5 @@
-import pygame, sys, os
+import pygame
+from src.util.position import Position
 
 def launch():
     height = 800

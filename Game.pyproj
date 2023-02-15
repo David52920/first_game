@@ -28,6 +28,8 @@
     <Compile Include="src\objects\entities\__init__.py" />
     <Compile Include="src\objects\gamemap.py" />
     <Compile Include="src\objects\gameobject.py" />
+    <Compile Include="src\util\position.py" />
+    <Compile Include="src\util\rectangle.py" />
     <Compile Include="src\scenes\lobby.py" />
     <Compile Include="src\scenes\login.py" />
     <Compile Include="src\scenes\scene.py" />

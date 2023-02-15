@@ -1,9 +1,8 @@
-import abc
 from src.objects.gameobject import GameObject
 
 class Tile(GameObject):
-    def __init__(self, x = 0, y = 0):
-        super().__init__(x, y)
+    def __init__(self, x, y, width=0, height=0):
+        super().__init__(x, y, width, height)
         self.type = None
 
     def setType(self, type):
