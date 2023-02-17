@@ -11,6 +11,8 @@ class Game:
     def __init__(self, gameWidth, gameHeight):
         self.nextFrame = pygame.time.get_ticks()
         self.screen = pygame.display.get_surface()
+        self.clock = pygame.time.Clock()
+        self.currentTime = 0
         self.gameWidth = gameWidth
         self.gameHeight = gameHeight
         self.running = True

@@ -14,6 +14,7 @@
     <InterpreterId />
     <IsWindowsApplication>True</IsWindowsApplication>
     <Name>Game</Name>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -21,6 +22,9 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="server\commands.py" />
+    <Compile Include="server\server.py" />
+    <Compile Include="server\testclient.py" />
     <Compile Include="src\game.py" />
     <Compile Include="src\objects\camera.py" />
     <Compile Include="src\objects\entities\enemy.py" />
@@ -47,6 +51,7 @@
     <Compile Include="src\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="server\" />
     <Folder Include="res\" />
     <Folder Include="res\bejeweled\" />
     <Folder Include="res\tiles\" />

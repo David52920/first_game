@@ -31,7 +31,7 @@ class LoginScene(Scene):
         pygame_widgets.update(events)
 
     def login(self):
-        self.game.addPlayer(Player(0,0))
+        self.game.addPlayer(Player(305,305))
         lobby = LobbyScene(self.game)
         self.game.addScene(lobby)
         self.game.changeScene(lobby)

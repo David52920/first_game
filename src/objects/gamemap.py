@@ -1,5 +1,4 @@
 from objects.tilesets import *
-from src.util.position import Position
 
 import pygame, math
 
@@ -8,8 +7,8 @@ class GameMap:
     TILE_HEIGHT = 32
     TILE_WIDTH_HALF = TILE_WIDTH / 2
     TILE_HEIGHT_HALF = TILE_HEIGHT / 2
-    MAP_WIDTH = 25
-    MAP_HEIGHT = 25
+    MAP_WIDTH = 30
+    MAP_HEIGHT = 30
 
     def __init__(self, game, camera):
         super().__init__()
@@ -18,40 +17,46 @@ class GameMap:
         self.gameWidth = game.gameWidth
         self.gameHeight = game.gameHeight
         self.camera = camera
-        self.map = [[0] * self.MAP_HEIGHT for _ in range(self.MAP_WIDTH)]
-        self.xBounds = Position()
-        self.yBounds = Position()
+        self.camera.offset.x = -400
+        self.camera.offset.y = -100
+        self.map = [[0] * self.MAP_WIDTH for _ in range(self.MAP_HEIGHT)]
+        self.xBounds = pygame.Vector2()
+        self.yBounds = pygame.Vector2()
         self.selectedTile = None
         self.players = game.players
 
     def fillMap(self):
-        for i in range(len(self.map)):
-            for j in range(len(self.map[i])):
-                if i == 5 or i == 7 or j == 3 or j == 5:
-                    tile = StoneTile(i, j)
+        #iterate left -> right first then top -> down
+        for y in range(self.MAP_HEIGHT): 
+            for x in range(self.MAP_WIDTH):
+                if x == 5 or x == 7 or y == 3 or y == 5:
+                    tile = StoneTile(x, y)
                 else:
-                    tile = GrassTile(i, j)
-                self.map[i][j] = tile
+                    tile = GrassTile(x, y)
+                self.map[y][x] = tile
         return self
 
     def render(self):
-        for tileX in range(len(self.map)):
-            for tileY in range(len(self.map[tileX])):
+        for tileY in range (self.MAP_HEIGHT):
+            for tileX in range (self.MAP_WIDTH):
+                worldCoords = self.getCoords(tileX, tileY)
+                if worldCoords[0] <= -self.TILE_WIDTH or worldCoords[0] >= self.gameWidth: continue
+                if worldCoords[1] <= -self.TILE_HEIGHT or worldCoords[1] >= self.gameHeight: continue
+                self.screen.blit(self.map[tileY][tileX].type, ( worldCoords[0], worldCoords[1] )) # currently draws all
 
-                worldX = (((tileX - tileY) * self.TILE_WIDTH_HALF) - self.camera.offset.x) 
-                worldY = ((tileX + tileY) * self.TILE_HEIGHT_HALF) - self.camera.offset.y
-
-                if worldX <= -self.TILE_WIDTH or worldX >= self.gameWidth: continue
-                if worldY <= -self.TILE_HEIGHT or worldY >= self.gameHeight: continue
-                
-                self.screen.blit(self.map[tileX][tileY].type, (worldX, worldY))
-
-    def getTile(self, screenX, screenY):
-        screenX += self.camera.offset.x
-        screenY += self.camera.offset.y
-        tileX = math.floor((((self.TILE_WIDTH_HALF * (-self.TILE_HEIGHT_HALF + (screenY +  self.TILE_HEIGHT_HALF)) /  self.TILE_HEIGHT_HALF) + (screenX +  self.TILE_WIDTH_HALF)) /  self.TILE_WIDTH_HALF) / 2) - 1
-        tileY = math.ceil((((-self.TILE_HEIGHT_HALF * ( self.TILE_WIDTH_HALF + (screenX + self.TILE_WIDTH)) / self.TILE_WIDTH_HALF) + (screenY + self.TILE_HEIGHT)) /  self.TILE_HEIGHT_HALF) / 2) 
+    # 1, 0 => 32, 16 screen coord
+    def getTile(self, worldCoordX, worldCoordY):
+        worldCoordX += self.camera.offset.x
+        worldCoordY += self.camera.offset.y
+        tileX = math.floor((((self.TILE_WIDTH_HALF * (-self.TILE_HEIGHT_HALF + worldCoordY) /  self.TILE_HEIGHT_HALF) + worldCoordX) /  self.TILE_WIDTH_HALF) / 2)
+        tileY = math.ceil((((-self.TILE_HEIGHT_HALF * ( self.TILE_WIDTH_HALF + (worldCoordX + self.TILE_WIDTH)) / self.TILE_WIDTH_HALF) + (worldCoordY + self.TILE_HEIGHT)) /  self.TILE_HEIGHT_HALF) / 2)
+        print(tileX, tileY)
         if tileX < 0 or tileY < 0 or tileX > self.MAP_WIDTH - 1 or tileY > self.MAP_HEIGHT - 1: return
-        return self.map[tileX][ tileY]
+        return self.map[tileY][ tileX]
+
+    def getCoords(self, tileX, tileY):
+        worldCoordX = ((tileX - tileY) * self.TILE_WIDTH_HALF) - self.camera.offset.x
+        worldCoordY = ((tileX + tileY) * self.TILE_HEIGHT_HALF) - self.camera.offset.y
+        return worldCoordX, worldCoordY
 
 

@@ -78,6 +78,22 @@ class Rectangle:
         self.topRight = self.x + self.width, self.y
         self.bottomLeft = self.x, self.y - self.height
         self.bottomRight = self.x + self.width, self.y + self.height
+    
+    def updateSize(self, width, height):
+        self.width = width
+        self.height = height
+        self.size = self.width, self.height
+        self.area = self.width * self.height
+        self.center = Position(self.x + (self.width / 2), self.y + (self.height / 2))
+        self.top = self.x
+        self.left = self.y
+        self.bottom = self.y + self.height
+        self.right = self.x + self.width
+
+        self.topLeft = self.x, self.y
+        self.topRight = self.x + self.width, self.y
+        self.bottomLeft = self.x, self.y - self.height
+        self.bottomRight = self.x + self.width, self.y + self.height
 
     def collided(self, b):
         return self.x + self.width > b.x and b.x + b.width > self.x and \

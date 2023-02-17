@@ -3,7 +3,7 @@ from src.util.position import Position
 
 def launch():
     height = 800
-    width = 800
+    width = 1000
     pygame.init()
     pygame.display.set_caption("First Game")
     pygame.display.set_mode([width, height])
